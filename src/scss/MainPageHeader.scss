@@ -1,0 +1,63 @@
+.sorting {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #345681;
+  border-radius: 5px;
+  .feedback_count {
+    color: white;
+    display: flex;
+  }
+  .logout {
+    cursor: pointer;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 5px;
+    padding: 3px 10px;
+    min-width: 50px;
+  }
+  .profile_page {
+    cursor: pointer;
+    // margin: 10px 5px;
+    background-color: #6be5ab;
+    border-radius: 5px;
+    padding: 3px 10px;
+  }
+  .sorting_select {
+    .sortBy {
+      border-radius: 5px;
+      color: #898989;
+      background: #f7f8fd;
+      text-align: center;
+      padding: 0 10px;
+      font-family: "estedad";
+      cursor: pointer;
+      border: none;
+      outline: none;
+      &:hover {
+        background: #ebeefd;
+      }
+      &:focus {
+        background: #ebeefd;
+        border: none;
+        outline: none;
+      }
+      option {
+        // border: none;
+        // outline: none;
+        // border: 5px solid red;
+        // cursor: pointer;
+      }
+    }
+    .sorting_title {
+      color: white;
+    }
+  }
+  .new_issue {
+    cursor: pointer;
+    margin: 10px 5px;
+    background-color: #6be5ab;
+    border-radius: 5px;
+    padding: 3px 10px;
+  }
+}

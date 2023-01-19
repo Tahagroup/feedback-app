@@ -1,0 +1,94 @@
+.auth_page {
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1000px;
+  margin: auto;
+  user-select: none;
+  color: white;
+  .loginWrapper {
+    display: flex;
+    background-color: #03dac5;
+    width: 800px;
+    border-radius: 10px;
+    .auth_left {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .logo_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        z-index: 2;
+      }
+      .blured {
+        width: 300px;
+        height: 300px;
+        position: absolute;
+        background: rgba(187, 134, 252, 0.002);
+        opacity: 0.99;
+        border: 2px solid rgba(0, 0, 0, 0.43);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+      }
+      img {
+        height: 100%;
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+    }
+    .auth_right {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 70%;
+        .input_wrapper {
+          display: flex;
+          flex-direction: column;
+          text-align: right;
+          gap: 5px;
+          input {
+            color: white;
+            outline: none;
+            border: none;
+            padding: 5px;
+            background-color: #03dac5;
+            border-bottom: 2px solid #17867b;
+            &::placeholder {
+              font-family: "estedad";
+              color: #17867b;
+            }
+          }
+        }
+        button {
+          background-color: #03dac5;
+          color: white;
+          border-radius: 5px;
+          border: none;
+          border: 1px solid white;
+          font-family: "estedad";
+          height: 35px;
+          cursor: pointer;
+        }
+        .auth_error {
+          color: red;
+        }
+        .toggle-login-signup {
+          user-select: none;
+          margin-bottom: auto;
+          font-size: 12px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

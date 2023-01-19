@@ -1,0 +1,113 @@
+.comments_Page {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 30px;
+  user-select: none;
+  gap: 20px;
+  direction: rtl;
+  .actions_part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .previous_page_link {
+      align-self: center;
+    }
+    color: #8a8ca3;
+    text-align: left;
+    cursor: pointer;
+    .return {
+      margin-left: 5px;
+    }
+  }
+  .editing_button {
+    cursor: pointer;
+    font-family: "estedad";
+    font-size: 13px;
+    padding: 7px 19px;
+    background: #23579a;
+    color: #6be6ab;
+    border-radius: 5px;
+  }
+  .details_part {
+    background: #ffffff;
+    border-radius: 10px;
+    .issue_files_wrapper {
+      .file_item {
+        .file_name {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .comments_part {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    .comments_count {
+      direction: rtl;
+    }
+    .comments_wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      & > div:not(:first-child) {
+        border-top: 1px solid #efefef;
+        padding-top: 20px;
+      }
+    }
+  }
+  .newcomment_part {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    color: #797d89;
+
+    .title {
+      text-align: right;
+    }
+    .comment_textarea {
+      font-family: "estedad";
+      direction: rtl;
+      font-size: 12px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      box-sizing: border-box;
+      min-height: 80px;
+      margin: auto;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #f7f8fd;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      text-align: right;
+    }
+    .comment_actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .send_comment {
+        cursor: pointer;
+        font-size: 13px;
+        padding: 5px 15px;
+        background: #6be6ab;
+        color: #23579a;
+        border-radius: 5px;
+      }
+      .remaining_letters {
+        font-size: 13px;
+        direction: rtl;
+      }
+    }
+  }
+}

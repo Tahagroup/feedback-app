@@ -1,0 +1,47 @@
+.main_page_wrapper {
+  display: flex;
+  gap: 20px;
+  max-width: 85%;
+  margin: auto;
+  margin-top: 50px;
+  user-select: none;
+  .issues_wrapper {
+    flex: 2;
+    .issue_items_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 50px 0;
+      color: black;
+    }
+  }
+  .filter_roadmap {
+    flex: 1;
+    .bale_logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      .bale_gradient {
+        width: 100%;
+        height: 120px;
+        background: linear-gradient(
+          180deg,
+          #31447b 0%,
+          #42b0a0 49.48%,
+          #4ae0b0 100%
+        );
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        // transform: rotate(-90deg);
+      }
+      .logo_flex {
+        position: absolute;
+        img {
+        }
+        .bale_feedback {
+        }
+      }
+    }
+  }
+}

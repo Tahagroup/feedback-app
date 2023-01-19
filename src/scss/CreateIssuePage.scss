@@ -1,0 +1,215 @@
+.create_issue_page {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 30px;
+  user-select: none;
+  .previous_page_link {
+    color: #8a8ca3;
+    text-align: left;
+    margin-bottom: 10px;
+    cursor: pointer;
+    .return {
+      margin-left: 5px;
+    }
+  }
+  .create_issue_card {
+    background: #ffffff;
+    background-color: 11328990;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px;
+    gap: 20px;
+    .header {
+      font-weight: bold;
+      text-align: center;
+    }
+    .title {
+      font-weight: bold;
+      text-align: right;
+    }
+    .help {
+      text-align: right;
+      color: #898989;
+      font-size: 12px;
+    }
+    .title_section {
+      .title_input {
+        font-family: "estedad";
+        box-sizing: border-box;
+        width: 100%;
+        height: 40px;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #f7f8fd;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        // text-align: right;
+        // direction: rtl;
+      }
+    }
+    .type_section {
+      width: 100%;
+      .type_input {
+        width: 100%;
+        height: 40px;
+        border-radius: 10px;
+        color: #898989;
+        background: #f7f8fd;
+        text-align: center;
+        padding: 0 15px;
+        font-family: "estedad";
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        &:hover {
+          background: #ebeefd;
+        }
+        &:focus {
+          background: #ebeefd;
+          border: none;
+          outline: none;
+        }
+        option {
+          // border: none;
+          // outline: none;
+          // border: 5px solid red;
+          // cursor: pointer;
+        }
+      }
+    }
+    .labels_section {
+      .checkbox_wrapper {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        input[type="checkbox"] {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border: 1px solid black;
+          border-radius: 50%;
+        }
+
+        input[type="checkbox"]:checked {
+          background-color: #6be5ab;
+        }
+        .checkbox_labels {
+          min-width: 100px;
+          border-radius: 5px;
+        }
+      }
+    }
+    .desc_section {
+      .desc_textarea {
+        font-family: "estedad";
+        // width: 100%;
+        box-sizing: border-box;
+        min-height: 40px;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #f7f8fd;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        text-align: right;
+        max-width: 100%;
+        min-width: 100%;
+      }
+    }
+    .attach_section {
+      .dropped_files {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        .uploaded_item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #f7f8fd;
+          border-radius: 10px;
+          padding: 10px 40px;
+          .uploaded_file {
+            flex: 1;
+            text-align: left;
+            margin-left: 10px;
+          }
+          .uploaded_percentage {
+          }
+        }
+      }
+      .drop_zone {
+        width: 100%;
+        margin-bottom: 20px;
+        .form-file-upload {
+          height: 80px;
+          width: 100%;
+          .label-file-upload {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #6be5ab;
+            color: #6be5ab;
+            border-radius: 10px;
+            .drag-file-element {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+              .drop_button {
+                display: flex;
+                flex-direction: row-reverse;
+                align-items: center;
+                gap: 5px;
+                .file_input {
+                  border: none;
+                  outline: none;
+                  font-family: "estedad";
+                  padding: 10px 20px;
+                  background-color: #6be5ab;
+                  color: white;
+                  border-radius: 5px;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+          .label-file-upload.drag-active {
+            background-color: #6be5ab;
+            color: white;
+          }
+        }
+      }
+    }
+    .buttons_wrapper {
+      display: flex;
+      justify-content: space-between;
+      button {
+        font-family: "estedad";
+        padding: 10px 20px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+      .draft {
+        color: #6be5ab;
+        background-color: #23579a;
+        border-radius: 5px;
+        cursor: not-allowed;
+      }
+      .save_feedback {
+        background-color: #6be5ab;
+        color: #23579a;
+        border-radius: 5px;
+      }
+    }
+  }
+}

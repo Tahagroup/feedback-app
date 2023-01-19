@@ -1,0 +1,76 @@
+.profilePage {
+  direction: rtl;
+  user-select: none;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 80px;
+  .loggedin_card {
+    background-color: #345681;
+    color: #6be5ab;
+    padding: 15px 20px 15px 30px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: right;
+    .current_name {
+    }
+    .howtoupdate {
+    }
+  }
+  .updateCard {
+    background-color: white;
+    padding: 15px 20px 15px 30px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .update_item {
+      .input {
+        font-family: "estedad";
+        box-sizing: border-box;
+        width: 50%;
+        height: 40px;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #f7f8fd;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+      }
+      .name {
+      }
+      .email {
+      }
+    }
+    .form_actions {
+      display: flex;
+      align-items: center;
+      width: 50%;
+      gap: 10px;
+      margin: auto;
+      .update_user {
+        cursor: pointer;
+        flex: 2;
+        font-family: "estedad";
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        padding: 10px;
+        background-color: #6be5ab !important;
+        color: white;
+      }
+      .cancel_update {
+        cursor: pointer;
+        flex: 1;
+        font-family: "estedad";
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        padding: 10px;
+        background-color: red !important;
+        color: white;
+        width: 50%;
+        margin: auto;
+      }
+    }
+  }
+}

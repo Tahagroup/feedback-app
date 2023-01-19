@@ -1,0 +1,32 @@
+.roadmap_summary {
+  color: black;
+  background-color: white;
+  padding: 20px;
+  .roadmap_link {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    .title {
+      color: #345681;
+    }
+    .more {
+      font-size: 14px;
+      text-decoration: none;
+      border-bottom: 1px solid purple;
+    }
+  }
+  .roadmap_counts {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+    .roadmap_item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.comment_item {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  .profile_pic {
+    width: 40px;
+    height: 40px;
+  }
+  .comment_body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: right;
+    .comment_user {
+    }
+    .comment_text {
+      color: #797d89;
+      font-size: 12px;
+    }
+  }
+}

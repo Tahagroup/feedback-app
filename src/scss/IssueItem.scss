@@ -1,0 +1,57 @@
+.issue_item {
+  background-color: white;
+  border-radius: 5px;
+  padding: 15px 20px 15px 30px;
+  direction: rtl;
+  .flex_wrapper {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    .comments_count {
+      display: flex;
+      gap: 5px;
+      .comments-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .issue_body {
+      flex: 1;
+      text-align: right;
+      padding-right: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .title {
+      }
+      .description {
+        font-size: 13px;
+      }
+      .tags {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        font-size: 10px;
+        .tag {
+          background: #f4f5f7;
+          border-radius: 10px;
+          padding: 4px 10px;
+        }
+      }
+    }
+    .issue_voting {
+      background-color: #f4f4f4;
+      border-radius: 5px;
+      padding: 0px 10px;
+      .upvote {
+        cursor: pointer;
+      }
+      .votes_count {
+      }
+      .downvote {
+        cursor: pointer;
+      }
+    }
+  }
+}
