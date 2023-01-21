@@ -1,4 +1,5 @@
 import React from "react";
+import { useDrag } from "react-dnd";
 import { toPersian } from "../utlils";
 interface BoardIssueItemProptypes {
   title: string;
@@ -10,11 +11,26 @@ function BoardIssueItem({
   title,
   borderColor,
 }: BoardIssueItemProptypes) {
+  const [{ isDragging }, dragRef] = useDrag(
+    {
+      // item is a plain JavaScript object describing the data being dragged
+      item: { id: issue.id, currentStatus: issue.status, type: "issue" },
+      //"type" is required. It is used by the "accept" specification of drop targets.
+      // type is a string (or a symbol) uniquely identifying a whole class of items in your application
+      type: "issue",
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+        // isDragging: monitor.isDragging(),
+      }),
+    },
+    []
+  );
   return (
     <div
-      className="board_item"
-      style={{ borderColor: borderColor }}
+      className="boardIssue_item"
+      style={{ borderColor: borderColor, opacity: isDragging ? "0.5" : "1" }}
       key={issue.id}
+      ref={dragRef}
     >
       <div className="header">
         <div className="status">{title}</div>

@@ -91,7 +91,7 @@ async function postRetry(body: any, tries: number) {
       "Retried two times, maybe there is a problem with your internet connection"
     );
   }
-  await fetch(`/issuesس`, {
+  await fetch(`/issues`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: {

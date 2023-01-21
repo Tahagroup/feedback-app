@@ -22,7 +22,25 @@ export const postVote = createAsyncThunk<
         },
       }).then((data) => data.json());
       if (response.message) {
-        throw new Error(response.message);
+        if (
+          response.message === "Already voted" ||
+          response.message === "Can not create vote"
+        ) {
+          const response = await fetch(`/issues/${issueId}/votes`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              type,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((data) => data.json())
+            .catch((err: any) => {
+              throw new Error(response.message);
+            });
+          return response;
+        }
       }
       return response;
     } catch (error: any) {

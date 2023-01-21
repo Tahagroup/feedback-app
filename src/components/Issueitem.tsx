@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { patchIssue } from "../store/action_creators/patchIssue";
 import { postVote } from "../store/action_creators/postVote";
 import { AppDispatch } from "../store/store";
 import { toPersian } from "../utlils";
@@ -11,20 +12,39 @@ interface IssueitempropTypes {
   allLabels: Label[];
 }
 function Issueitem({ issue, allLabels }: IssueitempropTypes) {
+  const statusRef = useRef<HTMLSelectElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const isLoggedin = useSelector(
-    (state: any) => state.authenticationSlice.currentUser
+  const [changed, setchanged] = useState(1);
+  const { currentUser, isAdmin } = useSelector(
+    (state: any) => state.authenticationSlice
   );
-  // const { votes } = useSelector((state: any) => state.issueSlice.currentUser);
+  // const useless = changed;
+  // const issues = useSelector((state: any) => state.issueSlice);
+  // console.log(issues);
 
+  // const dasd = issues.filter((Allissue: Issue) => {
+  //   console.log(Allissue.id, issue.id);
+
+  //   return Allissue.id === issue.id;
+  // });
   function voter(type: string) {
-    if (isLoggedin) {
+    if (currentUser) {
       dispatch(postVote({ type, issueId: `${issue.id}` }));
+      setchanged((prev: number) => prev + 1);
     } else {
       navigate("/login");
     }
   }
+  function statusChangeHandler(event: React.ChangeEvent) {
+    dispatch(
+      patchIssue({
+        issueId: String(issue.id),
+        status: (event.target as HTMLSelectElement).value,
+      })
+    );
+  }
+
   return (
     <div className="issue_item">
       <div className="flex_wrapper">
@@ -73,6 +93,18 @@ function Issueitem({ issue, allLabels }: IssueitempropTypes) {
           />
         </div>
       </div>
+      {isAdmin && (
+        <select
+          className="status_input"
+          ref={statusRef}
+          defaultValue={issue.status}
+          onChange={statusChangeHandler}
+        >
+          <option value="Pending">در حال برنامه ریزی</option>
+          <option value="InProgress">در حال انجام</option>
+          <option value="Done">تمام شده</option>
+        </select>
+      )}
     </div>
   );
 }

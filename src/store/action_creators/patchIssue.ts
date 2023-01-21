@@ -1,24 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const getIssues = createAsyncThunk<
+export const patchIssue = createAsyncThunk<
   any,
-  { offset: number },
+  {
+    issueId: string;
+    status: string;
+  },
   {
     rejectValue: any;
   }
->("GET/issues", async ({ offset }, { rejectWithValue }) => {
+>("PATCH/issue", async ({ issueId, status }, { rejectWithValue }) => {
   try {
-    const response = await fetch(`issues/?offset=${offset}`, {
+    const response = await fetch(`/issues/${issueId}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        status,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      if (data.ok) {
-        return data.json();
-      } else {
-        throw new Error("End of Issues");
-      }
-    });
+    }).then((data) => data.json());
     if (response.message) {
       throw new Error(response.message);
     }

@@ -8,8 +8,9 @@ const AuthSlice = createSlice({
   initialState: {
     currentUser: null,
     isAdmin: false,
-    admins: ["4"], // initial admin
+    adminsList: [4], // initial admin
     userInfos: [],
+    foundUser: null,
     isLoading: false,
     errorMsg: null,
   },
@@ -20,6 +21,14 @@ const AuthSlice = createSlice({
       state.isLoading = false;
       state.errorMsg = null;
     },
+    demoteUser(state, action) {
+      state.adminsList = state.adminsList.filter(
+        (admin) => admin !== action.payload
+      );
+    },
+    promoteUser(state, action) {
+      state.adminsList.push(action.payload);
+    },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
@@ -28,7 +37,7 @@ const AuthSlice = createSlice({
       state.isLoading = false;
       state.currentUser = action.payload;
       state.errorMsg = null;
-      if (action.payload.name === "admin") {
+      if (state.adminsList.includes(action.payload.id)) {
         state.isAdmin = true;
       } else {
         state.isAdmin = false;
@@ -59,6 +68,7 @@ const AuthSlice = createSlice({
     // get user info
     builder.addCase(getUserId.fulfilled, (state: any, action: any) => {
       state.userInfos.push(action.payload);
+      state.foundUser = action.payload;
     });
     builder.addCase(getUserId.pending, (state: any, action: any) => {
       // state.isLoading = true;
@@ -66,6 +76,7 @@ const AuthSlice = createSlice({
     builder.addCase(getUserId.rejected, (state: any, action: any) => {
       // state.isLoading = false;
       state.userInfo = null;
+      state.foundUser = null;
     });
     // patch user info
     builder.addCase(patchUserInfo.fulfilled, (state: any, action: any) => {

@@ -4,6 +4,7 @@ import { getFiles } from "../action_creators/getFiles";
 import { getIssues } from "../action_creators/getIssues";
 import { getLabels } from "../action_creators/getLabels";
 import { getSingleIssue } from "../action_creators/getSingleIssue";
+import { patchIssue } from "../action_creators/patchIssue";
 import { postComments } from "../action_creators/postComments";
 import { postIssues } from "../action_creators/postIssues";
 import { postVote } from "../action_creators/postVote";
@@ -37,7 +38,7 @@ const IssuesSlice = createSlice({
     });
     builder.addCase(getIssues.rejected, (state: any, action: any) => {
       state.isLoading = false;
-      state.errorMsg = action.payload.message;
+      state.errorMsg = action.payload;
     });
     // get single issue
     builder.addCase(getSingleIssue.fulfilled, (state: any, action: any) => {
@@ -63,14 +64,35 @@ const IssuesSlice = createSlice({
       // state.isLoading = false;
       // state.errorMsg = action.payload.message;
     });
+    // patch issue
+    builder.addCase(patchIssue.fulfilled, (state: any, action: any) => {
+      state.isLoading = false;
+      // console.log(action.payload);
+      const targetIssueIndex = state.issues.findIndex(
+        (issue: Issue) => issue.id === action.payload.id
+      );
+      state.issues[targetIssueIndex].status = action.payload.status;
+      // state.issues = action.payload.filter();
+      // state.errorMsg = null;
+    });
+    builder.addCase(patchIssue.pending, (state: any, action: any) => {
+      state.isLoading = true;
+    });
+    builder.addCase(patchIssue.rejected, (state: any, action: any) => {
+      state.isLoading = false;
+      // state.errorMsg = action.payload.message;
+    });
 
     // post vote
     builder.addCase(postVote.fulfilled, (state: any, action: any) => {
       // TODO: need to update redux store to update UI
-      console.log(state);
-      console.log(action.payload);
-
-      state.issues = action.payload;
+      // if (action.payload?.id) {
+      //   const elem = state.issues.find(
+      //     (issue: any) => issue.id === action.payload.issueId
+      //   );
+      //   console.log(elem);
+      // }
+      // state.issues = action.payload;
     });
     builder.addCase(postVote.pending, (state: any, action: any) => {
       //

@@ -145,7 +145,7 @@ function CreateIssuePage() {
         <div className="type_section">
           <div className="title">موضوع</div>
           <div className="help">راهنمایی در مورد عنوان بازخورد</div>
-          <select name="" id="" className="type_input" ref={typeRef}>
+          <select className="type_input" ref={typeRef}>
             <option value="Bug">باگ</option>
             <option value="Suggestion">پیشنهاد</option>
           </select>

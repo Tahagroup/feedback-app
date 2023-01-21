@@ -22,6 +22,7 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
     gap: 20px;
     .update_item {
       .input {
@@ -70,6 +71,80 @@
         color: white;
         width: 50%;
         margin: auto;
+      }
+    }
+  }
+  .access_control {
+    background-color: white;
+    padding: 15px 20px 15px 30px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    .explain {
+      text-align: right;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .search_users {
+      font-family: "estedad";
+      box-sizing: border-box;
+      width: 50%;
+      height: 40px;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #f7f8fd;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+    }
+    .access_change {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      color: white;
+      background-color: #6be5ab;
+      padding: 7px 10px;
+      border-radius: 5px;
+      .found_user {
+      }
+      .promote_demote {
+        font-size: 12px;
+        cursor: pointer;
+        background-color: #345681;
+        border-radius: 5px;
+        padding: 7px 15px;
+      }
+    }
+  }
+  .approving_card {
+    background-color: white;
+    padding: 15px 20px 15px 30px;
+    border-radius: 5px;
+    .approve_item {
+      display: flex;
+      justify-content: space-between;
+      .issue_item {
+        flex: 4;
+      }
+      .approve_buttons {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        color: white;
+        .approve {
+          background-color: green;
+          cursor: pointer;
+          border-radius: 5px;
+          padding: 10px;
+        }
+        .deny {
+          background-color: red;
+          cursor: pointer;
+          border-radius: 5px;
+          padding: 10px;
+        }
       }
     }
   }

@@ -16,15 +16,30 @@ function MainPage() {
   const selectedSortRef = useRef(null);
   const [sortOption, setsortOption] = useState("most-votess");
   const [filterOption, setFilterOption] = useState<string | number>("all");
+  const [offset, setOffset] = useState<number>(10);
   const dispatch = useDispatch<AppDispatch>();
   const { issues, labels, isLoading, errorMsg } = useSelector(
     (state: any) => state.issuesSlice
   );
 
   useEffect(() => {
-    dispatch(getIssues());
+    dispatch(getIssues({ offset }));
     dispatch(getLabels());
-  }, [dispatch]);
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [dispatch, offset]);
+
+  function onScroll() {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      if (errorMsg !== "End of Issues") {
+        setOffset((prevOffset) => prevOffset - 5);
+      }
+    }
+  }
 
   const sortedIssues = sortCopy(
     issues.filter((issue: Issue) => {
@@ -57,7 +72,7 @@ function MainPage() {
           sortOptionChangeHandler={sortOptionChangeHandler}
         />
         <div className="issue_items_wrapper">
-          {errorMsg && <div>{errorMsg}</div>}
+          {/* {errorMsg && <div>{errorMsg}</div>} */}
           {isLoading && <LoadingSpinner />}
           {issues.length !== 0 &&
             sortedIssues.map((issue: Issue) => (

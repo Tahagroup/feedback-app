@@ -1,18 +1,24 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Issueitem from "../components/Issueitem";
+import { getUserId } from "../store/action_creators/getUserId";
 import { patchUserInfo } from "../store/action_creators/patchUserInfo";
+import { authActions } from "../store/slices/AuthSlice";
 import { AppDispatch } from "../store/store";
+import { toPersian } from "../utlils";
 
 function ProfilePage() {
-  const currentUser = useSelector(
-    (state: any) => state.authenticationSlice.currentUser
+  const { currentUser, isAdmin, foundUser, adminsList } = useSelector(
+    (state: any) => state.authenticationSlice
   );
+
+  const { issues, labels } = useSelector((state: any) => state.issuesSlice);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const nameRef = useRef(currentUser.name);
   const emailRef = useRef(currentUser.email);
-
+  const userIdRef = useRef<HTMLInputElement>(null);
   function formSubmitHandler(event: React.FormEvent) {
     event.preventDefault();
     const name = nameRef.current.value;
@@ -26,6 +32,30 @@ function ProfilePage() {
     );
     navigate("/issues");
   }
+  function userSearchFormHandler(event: React.FormEvent) {
+    event.preventDefault();
+    const enteredId = (userIdRef.current as HTMLInputElement).value;
+    if (enteredId.trim() === "" || isNaN(+enteredId)) {
+      return;
+    }
+    dispatch(getUserId({ userId: enteredId }));
+  }
+
+  function issueApproveHandler() {
+    // patch issue
+  }
+  let foundUserIsAdmin: boolean = false;
+  if (foundUser) {
+    foundUserIsAdmin = adminsList.includes(foundUser?.id);
+  }
+  function changeAccessHandler(userIsAdmin: boolean) {
+    if (userIsAdmin) {
+      dispatch(authActions.demoteUser(foundUser.id));
+    } else {
+      dispatch(authActions.promoteUser(foundUser.id));
+    }
+  }
+
   return (
     <div className="profilePage">
       <div className="loggedin_card">
@@ -66,6 +96,51 @@ function ProfilePage() {
           </button>
         </div>
       </form>
+      {isAdmin && (
+        <div className="access_control">
+          <div className="explain">
+            شناسه کاربر را وارد کرده و سپس دکمه <kbd>Enter</kbd> را فشار دهید.
+          </div>
+          <form onSubmit={userSearchFormHandler}>
+            <input
+              type="text"
+              className="search_users"
+              ref={userIdRef}
+              placeholder="شناسه کاربر موردنظر را وارد کنید."
+            />
+          </form>
+          {foundUser && (
+            <div className="access_change">
+              <div className="found_user">نام کاربر: {foundUser.name}</div>
+              <div className="found_user">شناسه: {toPersian(foundUser.id)}</div>
+              <div
+                className="promote_demote"
+                onClick={() => changeAccessHandler(foundUserIsAdmin)}
+              >
+                {foundUserIsAdmin ? "تنزیل به کاربر" : "ترفیع به مدیر"}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {isAdmin && (
+        <div className="approving_card">
+          {/* render issues which are not approved, beside them buttons to approve */}
+          {issues.map((issue: Issue) => {
+            return (
+              <div className="approve_item" key={issue.id}>
+                <Issueitem issue={issue} allLabels={labels} />
+                <div className="approve_buttons">
+                  <div className="approve" onClick={issueApproveHandler}>
+                    تایید
+                  </div>
+                  <div className="deny">رد</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
