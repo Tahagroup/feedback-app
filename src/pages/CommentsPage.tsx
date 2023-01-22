@@ -5,7 +5,6 @@ import CommentItem from "../components/CommentItem";
 import IssueDetailsCard from "../components/IssueDetailsCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { getComments } from "../store/action_creators/getComments";
-import { getFiles } from "../store/action_creators/getFiles";
 import { getSingleIssue } from "../store/action_creators/getSingleIssue";
 import { postComments } from "../store/action_creators/postComments";
 import { AppDispatch } from "../store/store";
@@ -24,7 +23,6 @@ function CommentsPage() {
     if (issueId) {
       dispatch(getComments({ issueId }));
       dispatch(getSingleIssue({ issueId }));
-      // dispatch(getFiles({ issueId }));
     }
   }, [dispatch, issueId]);
 
@@ -50,8 +48,16 @@ function CommentsPage() {
           </span>
           <img src="../return-icon.svg" alt="return" />
         </div>
-        <div className="editing_button">ویرایش بازخورد</div>
       </div>
+      {/* {isAdmin && (
+        <div
+          className={`${isEditing ? "editing_button" : "save_changes"}`}
+          onClick={editHandler}
+        >
+          {isEditing ? "ذخیره تغییرات" : "ویرایش بازخورد"}
+        </div>
+      )} */}
+      {/* {isEditing && <div className="editing_box"></div>} */}
       <IssueDetailsCard issue={visitingIssue} />
       <div className="comments_part">
         {comments.length !== 0 && (

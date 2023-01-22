@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Issueitem from "../components/Issueitem";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -6,50 +6,63 @@ import MainPageHeader from "../components/MainPageHeader";
 import MainPageLabelsBox from "../components/MainPageLabelsCard";
 import RoadmapSummary from "../components/RoadmapSummary";
 import { getIssues } from "../store/action_creators/getIssues";
+import { getIssuesAndReplace } from "../store/action_creators/getIssuesAndReplace";
 import { getLabels } from "../store/action_creators/getLabels";
+import { issueActions } from "../store/slices/IssuesSlice";
 import { AppDispatch } from "../store/store";
-import { sortCopy } from "../utlils";
 
 ////////////////////////////////////////////////////////////////////////
 function MainPage() {
-  // const [data, error, isLoading] = useFetch("/issues");
   const selectedSortRef = useRef(null);
-  const [sortOption, setsortOption] = useState("most-votess");
+  const [sortOption, setsortOption] = useState("Votes");
   const [filterOption, setFilterOption] = useState<string | number>("all");
-  const [offset, setOffset] = useState<number>(10);
+  const offsetRef = useRef<number>(0);
   const dispatch = useDispatch<AppDispatch>();
   const { issues, labels, isLoading, errorMsg } = useSelector(
     (state: any) => state.issuesSlice
   );
 
-  useEffect(() => {
-    dispatch(getIssues({ offset }));
-    dispatch(getLabels());
-
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [dispatch, offset]);
-
-  function onScroll() {
+  const onScroll = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
     if (scrollTop + clientHeight >= scrollHeight) {
       if (errorMsg !== "End of Issues") {
-        setOffset((prevOffset) => prevOffset - 5);
+        offsetRef.current = offsetRef.current + 20;
+        dispatch(getIssues({ offset: offsetRef.current, sortBy: sortOption }));
+        // setOffset((prevOffset) => prevOffset + 20);
       }
     }
-  }
+  }, [dispatch, errorMsg, sortOption]);
+  useEffect(() => {
+    dispatch(
+      getIssuesAndReplace({ offset: offsetRef.current, sortBy: sortOption })
+    );
+    dispatch(getLabels());
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [dispatch, sortOption, onScroll]);
 
-  const sortedIssues = sortCopy(
-    issues.filter((issue: Issue) => {
-      if (filterOption === "all") {
-        return issue;
-      }
-      return (issue.labels as unknown as number[]).includes(+filterOption);
-    }),
-    (selectedSortRef.current! as HTMLSelectElement)?.value || sortOption
-  );
+  // function onScroll() {
+  //   const scrollTop = document.documentElement.scrollTop;
+  //   const scrollHeight = document.documentElement.scrollHeight;
+  //   const clientHeight = document.documentElement.clientHeight;
+  //   if (scrollTop + clientHeight >= scrollHeight) {
+  //     if (errorMsg !== "End of Issues") {
+  //       offsetRef.current = offsetRef.current + 20;
+  //       dispatch(getIssues({ offset: offsetRef.current, sortBy: sortOption }));
+  //       // setOffset((prevOffset) => prevOffset + 20);
+  //     }
+  //   }
+  // }
+
+  const filteredIssues = issues.filter((issue: Issue) => {
+    if (filterOption === "all") {
+      return issue;
+    }
+    return (issue.labels as unknown as number[]).includes(+filterOption);
+  });
+
   function filterChangeHandler(event: React.MouseEvent<HTMLSpanElement>) {
     const selectedFilterElement = event.target as HTMLSpanElement;
     document
@@ -59,6 +72,7 @@ function MainPage() {
     setFilterOption(selectedFilterElement.getAttribute("data-id")!);
   }
   function sortOptionChangeHandler(value: string) {
+    offsetRef.current = 0;
     setsortOption(value);
   }
 
@@ -75,7 +89,7 @@ function MainPage() {
           {/* {errorMsg && <div>{errorMsg}</div>} */}
           {isLoading && <LoadingSpinner />}
           {issues.length !== 0 &&
-            sortedIssues.map((issue: Issue) => (
+            filteredIssues.map((issue: Issue) => (
               <Issueitem issue={issue} allLabels={labels} key={issue.id} />
             ))}
         </div>

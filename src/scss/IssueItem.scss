@@ -47,7 +47,20 @@
       .upvote {
         cursor: pointer;
       }
-      .votes_count {
+      .votes_count--green {
+        font-size: 12px;
+        color: white;
+        background-color: green;
+        border-radius: 40%;
+        padding: 2px 5px;
+        margin-bottom: 2px;
+      }
+      .votes_count--red {
+        font-size: 12px;
+        color: white;
+        background-color: red;
+        border-radius: 40%;
+        padding: 2px 5px;
       }
       .downvote {
         cursor: pointer;

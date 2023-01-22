@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const getIssues = createAsyncThunk<
+export const getIssuesAndReplace = createAsyncThunk<
   string,
   { offset: number; sortBy: string },
   {
     rejectValue: any;
   }
->("GET/issues", async ({ offset, sortBy }, { rejectWithValue }) => {
+>("GET/issuesR", async ({ offset, sortBy }, { rejectWithValue }) => {
   try {
     const response = await fetch(
       `issues/?sortBy=${sortBy || "Date"}&sortType=DESC&offset=${offset}`,

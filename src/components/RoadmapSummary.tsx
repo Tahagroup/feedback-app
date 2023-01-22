@@ -5,44 +5,44 @@ import { toPersian } from "../utlils";
 import LoadingSpinner from "./LoadingSpinner";
 
 function RoadmapSummary() {
-  const { issues, isLoading } = useSelector((state: any) => state.issuesSlice);
-
+  const { isLoading, issues } = useSelector((state: any) => state.issuesSlice);
   const statusCounts =
-    issues &&
-    issues.reduce(
-      (
-        acc: {
-          Pending: number;
-          InProgress: number;
-          Done: number;
-        },
-        issue: Issue
-      ) => {
-        let newAccu;
-        switch (issue.status) {
-          case "Pending":
-            newAccu = {
-              ...acc,
-              Pending: acc.Pending + 1,
-            };
-            break;
-          case "InProgress":
-            newAccu = {
-              ...acc,
-              InProgress: acc.InProgress + 1,
-            };
-            break;
-          case "Done":
-            newAccu = {
-              ...acc,
-              Done: acc.Done + 1,
-            };
-            break;
-        }
-        return newAccu;
-      },
-      { Pending: 0, InProgress: 0, Done: 0 }
-    );
+    issues.length === 0
+      ? { Pending: 0, InProgress: 0, Done: 0 }
+      : issues.reduce(
+          (
+            acc: {
+              Pending: number;
+              InProgress: number;
+              Done: number;
+            },
+            issue: Issue
+          ) => {
+            let newAccu;
+            switch (issue.status) {
+              case "Pending":
+                newAccu = {
+                  ...acc,
+                  Pending: acc.Pending + 1,
+                };
+                break;
+              case "InProgress":
+                newAccu = {
+                  ...acc,
+                  InProgress: acc.InProgress + 1,
+                };
+                break;
+              case "Done":
+                newAccu = {
+                  ...acc,
+                  Done: acc.Done + 1,
+                };
+                break;
+            }
+            return newAccu;
+          },
+          { Pending: 0, InProgress: 0, Done: 0 }
+        );
 
   return (
     <div className="roadmap_summary">

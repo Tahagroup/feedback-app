@@ -3,6 +3,23 @@
   background: #ffffff;
   border-radius: 10px;
   padding: 20px;
+  .button {
+    cursor: pointer;
+    font-family: "estedad";
+    font-size: 13px;
+    border-radius: 5px;
+    padding: 7px 19px;
+    width: 100px;
+    margin-bottom: 20px;
+  }
+  .editing_button {
+    background: #6be6ab;
+    color: #23579a;
+  }
+  .save_changes {
+    background: #23579a;
+    color: #6be6ab;
+  }
   .text_details {
     display: flex;
     align-items: flex-start;
@@ -33,6 +50,23 @@
     .detail_body {
       flex: 1;
       text-align: right;
+      .editing_wrapper {
+        display: flex;
+        flex-direction: column;
+        .title_editing {
+          font-family: "estedad";
+          font-size: 16px;
+          max-width: 90%;
+          min-width: 90%;
+        }
+        .description_editing {
+          font-family: "estedad";
+          font-size: 12px;
+          max-width: 90%;
+          min-width: 90%;
+          min-height: min-content;
+        }
+      }
       .title {
       }
       .description {

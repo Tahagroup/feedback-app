@@ -20,7 +20,10 @@ export const postVote = createAsyncThunk<
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((data) => data.json());
+      }).then((data) => {
+        return data.json() || "vote sent";
+      });
+
       if (response.message) {
         if (
           response.message === "Already voted" ||

@@ -42,6 +42,14 @@ const AuthSlice = createSlice({
       } else {
         state.isAdmin = false;
       }
+      // localStorage.setItem(
+      //   "currentUser",
+      //   JSON.stringify({
+      //     currentUser: state.currentUser,
+      //     isAdmin: state.isAdmin,
+      //     adminsList: state.adminsList, // initial admin
+      //   })
+      // );
     });
     builder.addCase(getLoggedinUser.pending, (state: any, action: any) => {
       state.isLoading = true;

@@ -45,12 +45,11 @@ function MainPageHeader({
           name="sort"
           className="sortBy"
           onChange={(event) => sortOptionChangeHandler(event.target.value)}
-          defaultValue="most-votes"
+          defaultValue="Votes"
           ref={selectedSortRef}
         >
-          <option value="most-votes">بیشترین رای</option>
-          <option value="most-recent">جدیدترین</option>
-          <option value="most-comments">بیشترین نظر</option>
+          <option value="Votes">بیشترین رای مثبت</option>
+          <option value="Date">جدیدترین</option>
         </select>
         <span className="sorting_title"> :مرتب سازی</span>
       </div>

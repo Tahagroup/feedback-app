@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getComments } from "../action_creators/getComments";
 import { getFiles } from "../action_creators/getFiles";
 import { getIssues } from "../action_creators/getIssues";
+import { getIssuesAndReplace } from "../action_creators/getIssuesAndReplace";
 import { getLabels } from "../action_creators/getLabels";
 import { getSingleIssue } from "../action_creators/getSingleIssue";
 import { patchIssue } from "../action_creators/patchIssue";
@@ -21,22 +22,39 @@ const IssuesSlice = createSlice({
   },
   reducers: {
     //define possible actions(= define reducers which return actions)
-    // loginUser(state, action) {
-    //   state.currentUser = action.payload;
-    // },
+    clearIssues(state) {
+      state.issues.length = 0;
+    },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
     // get issues
     builder.addCase(getIssues.fulfilled, (state: any, action: any) => {
       state.isLoading = false;
-      state.issues = action.payload;
       state.errorMsg = null;
+      state.issues.push(...action.payload);
+      // state.issues = action.payload;
     });
     builder.addCase(getIssues.pending, (state: any, action: any) => {
       state.isLoading = true;
     });
     builder.addCase(getIssues.rejected, (state: any, action: any) => {
+      state.isLoading = false;
+      state.errorMsg = action.payload;
+    });
+    // get issues and replace prev state
+    builder.addCase(
+      getIssuesAndReplace.fulfilled,
+      (state: any, action: any) => {
+        state.isLoading = false;
+        state.errorMsg = null;
+        state.issues = action.payload;
+      }
+    );
+    builder.addCase(getIssuesAndReplace.pending, (state: any, action: any) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getIssuesAndReplace.rejected, (state: any, action: any) => {
       state.isLoading = false;
       state.errorMsg = action.payload;
     });
@@ -85,14 +103,31 @@ const IssuesSlice = createSlice({
 
     // post vote
     builder.addCase(postVote.fulfilled, (state: any, action: any) => {
-      // TODO: need to update redux store to update UI
-      // if (action.payload?.id) {
-      //   const elem = state.issues.find(
-      //     (issue: any) => issue.id === action.payload.issueId
-      //   );
-      //   console.log(elem);
-      // }
-      // state.issues = action.payload;
+      // console.log(action.payload); //{id: 33, type: 'Up', date: '2023-01-22T12:56:49.571Z', userId: 4, issueId: 13}
+      // state.issues = [...state.issues];
+      const changedIssueIndex = state.issues.findIndex(
+        (issue: Issue) => issue.id === action.payload.issueId
+      );
+      const voteType =
+        action.payload.type === "Up"
+          ? { upVoteCount: state.issues[changedIssueIndex].upVoteCount + 1 }
+          : {
+              downVoteCount: state.issues[changedIssueIndex].downVoteCount + 1,
+            };
+      const changedIssue = {
+        ...state.issues[changedIssueIndex],
+        ...voteType,
+      };
+      // console.log(changedIssueIndex, changedIssue);
+
+      const newIssues = [
+        ...state.issues.filter(
+          (issue: Issue) => issue.id !== action.payload.issueId
+        ),
+        changedIssue,
+      ];
+      // console.log(JSON.stringify(newIssues));
+      state.issues = newIssues;
     });
     builder.addCase(postVote.pending, (state: any, action: any) => {
       //

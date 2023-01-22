@@ -6,6 +6,7 @@ import { json } from "stream/consumers";
 import BoardIssueItem from "../components/BoardIssueItem";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { getIssues } from "../store/action_creators/getIssues";
+import { getIssuesAndReplace } from "../store/action_creators/getIssuesAndReplace";
 import { patchIssue } from "../store/action_creators/patchIssue";
 import { AppDispatch } from "../store/store";
 
@@ -15,7 +16,7 @@ function BoardPage() {
   const { issues, isLoading } = useSelector((state: any) => state.issuesSlice);
   const { isAdmin } = useSelector((state: any) => state.authenticationSlice);
   useEffect(() => {
-    dispatch(getIssues({ offset: 0 }));
+    dispatch(getIssuesAndReplace({ offset: 0, sortBy: "Votes" }));
   }, [dispatch]);
 
   /////////////////////////////////////////////////////////////////////
@@ -28,7 +29,15 @@ function BoardPage() {
     drop(item: any, monitor) {
       // item is the dragged element
       if (item.currentStatus !== "Pending" && isAdmin) {
-        dispatch(patchIssue({ issueId: item.id, status: "InProgress" }));
+        dispatch(
+          patchIssue({
+            issueId: item.id,
+            status: "InProgress",
+            description: "",
+            title: "",
+            type: "",
+          })
+        );
       }
     },
     // Props to collect
@@ -41,7 +50,15 @@ function BoardPage() {
     accept: "issue",
     drop(item: any, monitor) {
       if (item.currentStatus !== "InProgress" && isAdmin) {
-        dispatch(patchIssue({ issueId: item.id, status: "InProgress" }));
+        dispatch(
+          patchIssue({
+            issueId: item.id,
+            status: "InProgress",
+            description: "",
+            title: "",
+            type: "",
+          })
+        );
       }
     },
     collect: (monitor) => ({
@@ -53,7 +70,15 @@ function BoardPage() {
     accept: "issue",
     drop(item: any, monitor) {
       if (item.currentStatus !== "Done" && isAdmin) {
-        dispatch(patchIssue({ issueId: item.id, status: "Done" }));
+        dispatch(
+          patchIssue({
+            issueId: item.id,
+            status: "Done",
+            description: "",
+            title: "",
+            type: "",
+          })
+        );
       }
     },
     collect: (monitor) => ({

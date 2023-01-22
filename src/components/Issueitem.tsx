@@ -15,23 +15,15 @@ function Issueitem({ issue, allLabels }: IssueitempropTypes) {
   const statusRef = useRef<HTMLSelectElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [changed, setchanged] = useState(1);
+  // const [changed, setchanged] = useState(1);
   const { currentUser, isAdmin } = useSelector(
     (state: any) => state.authenticationSlice
   );
-  // const useless = changed;
-  // const issues = useSelector((state: any) => state.issueSlice);
-  // console.log(issues);
 
-  // const dasd = issues.filter((Allissue: Issue) => {
-  //   console.log(Allissue.id, issue.id);
-
-  //   return Allissue.id === issue.id;
-  // });
   function voter(type: string) {
     if (currentUser) {
       dispatch(postVote({ type, issueId: `${issue.id}` }));
-      setchanged((prev: number) => prev + 1);
+      // setchanged((prev: number) => prev + 1);
     } else {
       navigate("/login");
     }
@@ -40,6 +32,9 @@ function Issueitem({ issue, allLabels }: IssueitempropTypes) {
     dispatch(
       patchIssue({
         issueId: String(issue.id),
+        description: "",
+        title: "",
+        type: "",
         status: (event.target as HTMLSelectElement).value,
       })
     );
@@ -82,8 +77,11 @@ function Issueitem({ issue, allLabels }: IssueitempropTypes) {
             className="upvote"
             onClick={() => voter("Up")}
           />
-          <div className="votes_count">
-            {toPersian(issue.upVoteCount - issue.downVoteCount)}
+          <div className="votes_count--green">
+            {toPersian(issue.upVoteCount)}
+          </div>
+          <div className="votes_count--red">
+            {toPersian(issue.downVoteCount)}
           </div>
           <img
             src="./downvote-icon.svg"

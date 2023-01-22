@@ -13,6 +13,8 @@
     width: 800px;
     border-radius: 10px;
     .auth_left {
+      // to prevent flickering
+      height: 550px;
       width: 50%;
       display: flex;
       align-items: center;

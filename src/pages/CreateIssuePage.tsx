@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -71,26 +70,35 @@ function CreateIssuePage() {
   }
   async function fileUploader(file: File) {
     if (file === null) return;
+    let xhr = new XMLHttpRequest();
+    xhr.upload.onprogress = function (event) {
+      const progress = ((event.loaded / event.total) * 100).toFixed(2);
+      console.log("Upload Progress: ", progress);
+      setProgress(+progress);
+    };
+
+    // xhr.onloadend = function (request) {
+    //   if (xhr.status === 200) {
+    //     setProgress(100);
+    //   } else {
+    //     console.log("error " + this.status);
+    //   }
+    // };
+    xhr.onload = () => {
+      setuploadedFile((prev: any) => {
+        const newState = prev.concat({ id: xhr.response.id, file });
+        return newState;
+      });
+    };
+
+    xhr.upload.onerror = function () {
+      console.log("error " + this.status);
+    };
+    xhr.open("POST", "/files/upload");
     const formData = new FormData();
     formData.append("file", file);
-    const fileResponse = await axios
-      .post("/files/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: function (progressEvent) {
-          setProgress((progressEvent.progress || 100) * 100);
-          // console.log("progress", (progressEvent.progress || 100) * 100);
-        },
-      })
-      .then((response) => {
-        setuploadedFile((prev: any) => {
-          const newState = prev.concat({ id: response.data.id, file });
-          return newState;
-        });
-      })
-      .catch((error) => console.error(error));
-    // console.log("fileResponse: ", fileResponse);
+    xhr.responseType = "json";
+    xhr.send(formData);
   }
 
   function saveIssueHandler() {
