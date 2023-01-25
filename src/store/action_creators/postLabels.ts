@@ -1,27 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const postVote = createAsyncThunk<
+export const postLabel = createAsyncThunk<
   any,
-  { issueId: string; type: string },
+  { name: string; color: number },
   {
     rejectValue: any;
   }
->("POST/vote", async ({ issueId, type }, { rejectWithValue }) => {
+>("POST/label", async ({ name, color }, { rejectWithValue }) => {
   try {
-    const response = await fetch(`/issues/${issueId}/votes`, {
+    const response = await fetch(`/labels`, {
       method: "POST",
       body: JSON.stringify({
-        type,
+        name,
+        color,
       }),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      if (data.ok) {
-        return { type, issueId };
-      }
-      return data.json();
-    });
+    }).then((data) => data.json());
     if (response.message) {
       throw new Error(response.message);
     }

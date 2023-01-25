@@ -1,7 +1,7 @@
 import React, { FormEvent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { useNavigate } from "react-router";
-import { getLoggedinUser } from "../store/action_creators/getLoggedinUser";
+import { postLoggedinUser } from "../store/action_creators/postLoggedinUser";
 import { AppDispatch } from "../store/store";
 
 function LoginPage() {
@@ -18,7 +18,7 @@ function LoginPage() {
     event.preventDefault();
     const email = emailRef.current!.value;
     const password = passwordRef.current!.value;
-    dispatch(getLoggedinUser({ email, password }));
+    dispatch(postLoggedinUser({ email, password }));
   }
   return (
     <div className="auth_page">

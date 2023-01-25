@@ -1,7 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import Issueitem from "../components/Issueitem";
 import { getUserId } from "../store/action_creators/getUserId";
 import { patchUserInfo } from "../store/action_creators/patchUserInfo";
 import { authActions } from "../store/slices/AuthSlice";
@@ -13,7 +12,6 @@ function ProfilePage() {
     (state: any) => state.authenticationSlice
   );
 
-  const { issues, labels } = useSelector((state: any) => state.issuesSlice);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const nameRef = useRef(currentUser.name);
@@ -41,9 +39,6 @@ function ProfilePage() {
     dispatch(getUserId({ userId: enteredId }));
   }
 
-  function issueApproveHandler() {
-    // patch issue
-  }
   let foundUserIsAdmin: boolean = false;
   if (foundUser) {
     foundUserIsAdmin = adminsList.includes(foundUser?.id);
@@ -123,26 +118,26 @@ function ProfilePage() {
           )}
         </div>
       )}
-      {isAdmin && (
-        <div className="approving_card">
-          {/* render issues which are not approved, beside them buttons to approve */}
-          {issues.map((issue: Issue) => {
-            return (
-              <div className="approve_item" key={issue.id}>
-                <Issueitem issue={issue} allLabels={labels} />
-                <div className="approve_buttons">
-                  <div className="approve" onClick={issueApproveHandler}>
-                    تایید
-                  </div>
-                  <div className="deny">رد</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
-
 export default ProfilePage;
+
+// {isAdmin && (
+//   <div className="approving_card">
+//     {/* render issues which are not approved, beside them buttons to approve */}
+//     {issues.map((issue: Issue) => {
+//       return (
+//         <div className="approve_item" key={issue.id}>
+//           <Issueitem issue={issue} allLabels={labels} />
+//           <div className="approve_buttons">
+//             <div className="approve" onClick={issueApproveHandler}>
+//               تایید
+//             </div>
+//             <div className="deny">رد</div>
+//           </div>
+//         </div>
+//       );
+//     })}
+//   </div>
+// )}

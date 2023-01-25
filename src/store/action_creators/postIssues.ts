@@ -42,7 +42,7 @@ async function postRetry(body: any, tries: number) {
   const triesLeft = tries - 1;
   if (!triesLeft) {
     throw Error(
-      "Retried two times, maybe there is a problem with your internet connection"
+      "Retried two times and failed to communicate with server, maybe there is a problem with your internet connection"
     );
   }
   await fetch(`/issues`, {
@@ -52,10 +52,8 @@ async function postRetry(body: any, tries: number) {
       "Content-Type": "application/json",
     },
   })
-    .then((data) => {
-      return data.json();
-    })
+    .then((data) => data.json())
     .catch((error) => {
-      return () => postRetry(body, triesLeft);
+      postRetry(body, triesLeft);
     });
 }

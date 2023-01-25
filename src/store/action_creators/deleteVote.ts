@@ -1,24 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const postVote = createAsyncThunk<
+export const deleteVote = createAsyncThunk<
   any,
-  { issueId: string; type: string },
+  { issueId: string },
   {
     rejectValue: any;
   }
->("POST/vote", async ({ issueId, type }, { rejectWithValue }) => {
+>("DELETE/vote", async ({ issueId }, { rejectWithValue }) => {
   try {
     const response = await fetch(`/issues/${issueId}/votes`, {
-      method: "POST",
-      body: JSON.stringify({
-        type,
-      }),
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     }).then((data) => {
       if (data.ok) {
-        return { type, issueId };
+        return { issueId };
       }
       return data.json();
     });

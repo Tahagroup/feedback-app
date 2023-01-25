@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import CommentItem from "../components/CommentItem";
@@ -14,17 +14,35 @@ function CommentsPage() {
   const { issueId } = useParams();
   const [inputLength, setInputLength] = useState<number>(0);
   const textRef = useRef(null);
+  const offsetRef = useRef(0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, visitingIssue, comments } = useSelector(
+  const { isLoading, visitingIssue, comments, errorMsg } = useSelector(
     (state: any) => state.issuesSlice
   );
+  const onScroll = useCallback(() => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    // if reaches end of page
+    if (scrollTop + clientHeight >= scrollHeight) {
+      if (issueId && errorMsg !== "End of Comments") {
+        offsetRef.current = offsetRef.current + 20;
+        dispatch(getComments({ issueId, offset: offsetRef.current }));
+      }
+    }
+  }, [dispatch, issueId, errorMsg]);
+
   useEffect(() => {
+    window.addEventListener("scroll", onScroll);
     if (issueId) {
-      dispatch(getComments({ issueId }));
+      dispatch(getComments({ issueId, offset: 0 }));
       dispatch(getSingleIssue({ issueId }));
     }
-  }, [dispatch, issueId]);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [dispatch, issueId, onScroll]);
 
   function inputChangehandler(event: React.ChangeEvent) {
     setInputLength((event.target as HTMLTextAreaElement).value.length);
@@ -35,7 +53,7 @@ function CommentsPage() {
       dispatch(postComments({ text, issueId }));
       (textRef.current! as HTMLTextAreaElement).value = "";
       setInputLength(0);
-      dispatch(getComments({ issueId }));
+      dispatch(getComments({ issueId, offset: 0 }));
     }
   }
 
@@ -49,32 +67,7 @@ function CommentsPage() {
           <img src="../return-icon.svg" alt="return" />
         </div>
       </div>
-      {/* {isAdmin && (
-        <div
-          className={`${isEditing ? "editing_button" : "save_changes"}`}
-          onClick={editHandler}
-        >
-          {isEditing ? "ذخیره تغییرات" : "ویرایش بازخورد"}
-        </div>
-      )} */}
-      {/* {isEditing && <div className="editing_box"></div>} */}
-      <IssueDetailsCard issue={visitingIssue} />
-      <div className="comments_part">
-        {comments.length !== 0 && (
-          <div className="comments_count">{toPersian(comments.length)} نظر</div>
-        )}
-        <div className="comments_wrapper">
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : comments.length === 0 ? (
-            "هیچ نظری ثبت نشده است."
-          ) : (
-            comments.map((comment: any) => (
-              <CommentItem comment={comment} key={comment.id} />
-            ))
-          )}
-        </div>
-      </div>
+      {visitingIssue && <IssueDetailsCard issue={visitingIssue} />}
       <div className="newcomment_part">
         <div className="title">نظر جدید</div>
         <textarea
@@ -91,6 +84,25 @@ function CommentsPage() {
           <div onClick={sendClickHandler} className="send_comment">
             ثبت نظر
           </div>
+        </div>
+      </div>
+      <div className="comments_part">
+        {comments.length !== 0 && (
+          <div className="comments_count">{toPersian(comments.length)} نظر</div>
+        )}
+        <div className="comments_wrapper">
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : comments.length === 0 ? (
+            "هیچ نظری ثبت نشده است."
+          ) : (
+            <>
+              {comments.map((comment: any) => (
+                <CommentItem comment={comment} key={comment.id} />
+              ))}
+              {/* <div ref={lastElementRef}></div> */}
+            </>
+          )}
         </div>
       </div>
     </div>

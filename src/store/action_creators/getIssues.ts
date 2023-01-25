@@ -9,7 +9,7 @@ export const getIssues = createAsyncThunk<
 >("GET/issues", async ({ offset, sortBy }, { rejectWithValue }) => {
   try {
     const response = await fetch(
-      `issues/?sortBy=${sortBy || "Date"}&sortType=DESC&offset=${offset}`,
+      `issues/?sortBy=${sortBy ?? "Date"}&sortType=DESC&offset=${offset}`,
       {
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import RoadmapSummary from "../components/RoadmapSummary";
 import { getIssues } from "../store/action_creators/getIssues";
 import { getIssuesAndReplace } from "../store/action_creators/getIssuesAndReplace";
 import { getLabels } from "../store/action_creators/getLabels";
-import { issueActions } from "../store/slices/IssuesSlice";
+import { authActions } from "../store/slices/AuthSlice";
 import { AppDispatch } from "../store/store";
 
 ////////////////////////////////////////////////////////////////////////
@@ -26,11 +26,11 @@ function MainPage() {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
+
     if (scrollTop + clientHeight >= scrollHeight) {
       if (errorMsg !== "End of Issues") {
         offsetRef.current = offsetRef.current + 20;
         dispatch(getIssues({ offset: offsetRef.current, sortBy: sortOption }));
-        // setOffset((prevOffset) => prevOffset + 20);
       }
     }
   }, [dispatch, errorMsg, sortOption]);
@@ -42,19 +42,6 @@ function MainPage() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [dispatch, sortOption, onScroll]);
-
-  // function onScroll() {
-  //   const scrollTop = document.documentElement.scrollTop;
-  //   const scrollHeight = document.documentElement.scrollHeight;
-  //   const clientHeight = document.documentElement.clientHeight;
-  //   if (scrollTop + clientHeight >= scrollHeight) {
-  //     if (errorMsg !== "End of Issues") {
-  //       offsetRef.current = offsetRef.current + 20;
-  //       dispatch(getIssues({ offset: offsetRef.current, sortBy: sortOption }));
-  //       // setOffset((prevOffset) => prevOffset + 20);
-  //     }
-  //   }
-  // }
 
   const filteredIssues = issues.filter((issue: Issue) => {
     if (filterOption === "all") {

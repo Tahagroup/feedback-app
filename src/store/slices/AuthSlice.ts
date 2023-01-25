@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getLoggedinUser } from "../action_creators/getLoggedinUser";
+import { postLoggedinUser } from "../action_creators/postLoggedinUser";
+import { getUserFromLocalStorage } from "../action_creators/getUserFromLocalStorage";
 import { getUserId } from "../action_creators/getUserId";
 import { patchUserInfo } from "../action_creators/patchUserInfo";
 import { postSignedupUser } from "../action_creators/postSignedupUser";
+import { setUserOnLocalStorage } from "../action_creators/setUserOnLocalStorage";
 const AuthSlice = createSlice({
   name: "authSlice",
   initialState: {
@@ -18,8 +20,11 @@ const AuthSlice = createSlice({
     //define possible actions(= define reducers which return actions)
     logoutUser(state) {
       state.currentUser = null;
+      state.isAdmin = false;
       state.isLoading = false;
       state.errorMsg = null;
+      state.foundUser = null;
+      localStorage.clear();
     },
     demoteUser(state, action) {
       state.adminsList = state.adminsList.filter(
@@ -29,11 +34,22 @@ const AuthSlice = createSlice({
     promoteUser(state, action) {
       state.adminsList.push(action.payload);
     },
+    // getUserStateFromLocalStorage(state) {
+    //   const userState = JSON.parse(
+    //     localStorage.getItem("currentUser") ?? "null"
+    //   );
+    //   if (!userState) {
+    //     return;
+    //   }
+    //   state.currentUser = userState.currentUser;
+    //   state.isAdmin = userState.isAdmin;
+    // },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getLoggedinUser.fulfilled, (state: any, action: any) => {
+    // login user
+    builder.addCase(postLoggedinUser.fulfilled, (state: any, action: any) => {
       state.isLoading = false;
       state.currentUser = action.payload;
       state.errorMsg = null;
@@ -42,21 +58,12 @@ const AuthSlice = createSlice({
       } else {
         state.isAdmin = false;
       }
-      // localStorage.setItem(
-      //   "currentUser",
-      //   JSON.stringify({
-      //     currentUser: state.currentUser,
-      //     isAdmin: state.isAdmin,
-      //     adminsList: state.adminsList, // initial admin
-      //   })
-      // );
     });
-    builder.addCase(getLoggedinUser.pending, (state: any, action: any) => {
+    builder.addCase(postLoggedinUser.pending, (state: any, action: any) => {
       state.isLoading = true;
     });
-    builder.addCase(getLoggedinUser.rejected, (state: any, action: any) => {
+    builder.addCase(postLoggedinUser.rejected, (state: any, action: any) => {
       state.isLoading = false;
-      state.currentUser = null;
       state.errorMsg = action.payload;
     });
     // signup user
@@ -64,13 +71,17 @@ const AuthSlice = createSlice({
       state.isLoading = false;
       state.currentUser = action.payload;
       state.errorMsg = null;
+      if (state.adminsList.includes(action.payload.id)) {
+        state.isAdmin = true;
+      } else {
+        state.isAdmin = false;
+      }
     });
     builder.addCase(postSignedupUser.pending, (state: any, action: any) => {
       state.isLoading = true;
     });
     builder.addCase(postSignedupUser.rejected, (state: any, action: any) => {
       state.isLoading = false;
-      state.currentUser = null;
       state.errorMsg = action.payload;
     });
     // get user info
@@ -97,6 +108,53 @@ const AuthSlice = createSlice({
     builder.addCase(patchUserInfo.rejected, (state: any, action: any) => {
       // state.isLoading = false;
     });
+
+    // get user info from local storage
+    builder.addCase(
+      getUserFromLocalStorage.fulfilled,
+      (state: any, action: any) => {
+        // state.isLoading = false;
+        state.currentUser = action.payload;
+        state.errorMsg = null;
+
+        if (state.adminsList.includes(action.payload.id)) {
+          state.isAdmin = true;
+        } else {
+          state.isAdmin = false;
+        }
+      }
+    );
+    builder.addCase(
+      getUserFromLocalStorage.pending,
+      (state: any, action: any) => {
+        // state.isLoading = true;
+      }
+    );
+    builder.addCase(
+      getUserFromLocalStorage.rejected,
+      (state: any, action: any) => {
+        // state.isLoading = false;
+      }
+    );
+    // set user info on local storage
+    builder.addCase(
+      setUserOnLocalStorage.fulfilled,
+      (state: any, action: any) => {
+        //
+      }
+    );
+    builder.addCase(
+      setUserOnLocalStorage.pending,
+      (state: any, action: any) => {
+        //
+      }
+    );
+    builder.addCase(
+      setUserOnLocalStorage.rejected,
+      (state: any, action: any) => {
+        //
+      }
+    );
   },
 });
 

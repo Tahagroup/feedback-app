@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteVote } from "../action_creators/deleteVote";
 import { getComments } from "../action_creators/getComments";
 import { getFiles } from "../action_creators/getFiles";
 import { getIssues } from "../action_creators/getIssues";
@@ -6,6 +7,7 @@ import { getIssuesAndReplace } from "../action_creators/getIssuesAndReplace";
 import { getLabels } from "../action_creators/getLabels";
 import { getSingleIssue } from "../action_creators/getSingleIssue";
 import { patchIssue } from "../action_creators/patchIssue";
+import { patchVote } from "../action_creators/patchVote";
 import { postComments } from "../action_creators/postComments";
 import { postIssues } from "../action_creators/postIssues";
 import { postVote } from "../action_creators/postVote";
@@ -13,18 +15,16 @@ const IssuesSlice = createSlice({
   name: "issuesSlice",
   initialState: {
     issues: [],
-    visitingIssue: [],
+    visitingIssue: null,
     labels: [],
     comments: [],
     files: [],
     isLoading: false,
     errorMsg: null,
+    commentsPageOffset: 0,
   },
   reducers: {
     //define possible actions(= define reducers which return actions)
-    clearIssues(state) {
-      state.issues.length = 0;
-    },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
@@ -49,6 +49,7 @@ const IssuesSlice = createSlice({
         state.isLoading = false;
         state.errorMsg = null;
         state.issues = action.payload;
+        state.commentsPage = 0;
       }
     );
     builder.addCase(getIssuesAndReplace.pending, (state: any, action: any) => {
@@ -103,36 +104,100 @@ const IssuesSlice = createSlice({
 
     // post vote
     builder.addCase(postVote.fulfilled, (state: any, action: any) => {
-      // console.log(action.payload); //{id: 33, type: 'Up', date: '2023-01-22T12:56:49.571Z', userId: 4, issueId: 13}
-      // state.issues = [...state.issues];
       const changedIssueIndex = state.issues.findIndex(
-        (issue: Issue) => issue.id === action.payload.issueId
+        (issue: Issue) => issue.id === +action.payload.issueId
       );
       const voteType =
         action.payload.type === "Up"
-          ? { upVoteCount: state.issues[changedIssueIndex].upVoteCount + 1 }
+          ? {
+              upVoteCount: state.issues[changedIssueIndex].upVoteCount + 1,
+            }
           : {
               downVoteCount: state.issues[changedIssueIndex].downVoteCount + 1,
             };
       const changedIssue = {
         ...state.issues[changedIssueIndex],
         ...voteType,
+        ...{ vote: { type: action.payload.type } },
       };
-      // console.log(changedIssueIndex, changedIssue);
 
       const newIssues = [
-        ...state.issues.filter(
-          (issue: Issue) => issue.id !== action.payload.issueId
-        ),
+        ...state.issues.slice(0, changedIssueIndex),
         changedIssue,
+        ...state.issues.slice(changedIssueIndex + 1),
       ];
-      // console.log(JSON.stringify(newIssues));
       state.issues = newIssues;
     });
     builder.addCase(postVote.pending, (state: any, action: any) => {
       //
     });
     builder.addCase(postVote.rejected, (state: any, action: any) => {
+      //
+    });
+    // patch vote
+    builder.addCase(patchVote.fulfilled, (state: any, action: any) => {
+      const changedIssueIndex = state.issues.findIndex(
+        (issue: Issue) => issue.id === +action.payload.issueId
+      );
+      const voteType =
+        action.payload.type === "Up"
+          ? {
+              upVoteCount: state.issues[changedIssueIndex].upVoteCount + 1,
+              downVoteCount: state.issues[changedIssueIndex].downVoteCount - 1,
+            }
+          : {
+              upVoteCount: state.issues[changedIssueIndex].upVoteCount - 1,
+              downVoteCount: state.issues[changedIssueIndex].downVoteCount + 1,
+            };
+      const changedIssue = {
+        ...state.issues[changedIssueIndex],
+        ...voteType,
+        ...{ vote: { type: action.payload.type } },
+      };
+
+      const newIssues = [
+        ...state.issues.slice(0, changedIssueIndex),
+        changedIssue,
+        ...state.issues.slice(changedIssueIndex + 1),
+      ];
+      state.issues = newIssues;
+    });
+    builder.addCase(patchVote.pending, (state: any, action: any) => {
+      //
+    });
+    builder.addCase(patchVote.rejected, (state: any, action: any) => {
+      //
+    });
+    // delete vote
+    builder.addCase(deleteVote.fulfilled, (state: any, action: any) => {
+      const changedIssueIndex = state.issues.findIndex(
+        (issue: Issue) => issue.id === +action.payload.issueId
+      );
+      const voteType =
+        state.issues[changedIssueIndex].vote.type === "Up"
+          ? {
+              upVoteCount: state.issues[changedIssueIndex].upVoteCount - 1,
+            }
+          : {
+              downVoteCount: state.issues[changedIssueIndex].downVoteCount - 1,
+            };
+      const changedIssue = {
+        ...state.issues[changedIssueIndex],
+        ...voteType,
+        ...{ vote: {} },
+      };
+
+      const newIssues = [
+        ...state.issues.slice(0, changedIssueIndex),
+        changedIssue,
+        ...state.issues.slice(changedIssueIndex + 1),
+      ];
+      state.issues = newIssues;
+    });
+    builder.addCase(deleteVote.pending, (state: any, action: any) => {
+      //
+    });
+    builder.addCase(deleteVote.rejected, (state: any, action: any) => {
       //
     });
     // get labels
@@ -147,14 +212,16 @@ const IssuesSlice = createSlice({
     });
     // get comments
     builder.addCase(getComments.fulfilled, (state: any, action: any) => {
-      state.comments = action.payload;
+      state.comments = [...state.comments, ...action.payload];
       state.isLoading = false;
+      state.errorMsg = null;
     });
     builder.addCase(getComments.pending, (state: any, action: any) => {
       state.isLoading = true;
     });
     builder.addCase(getComments.rejected, (state: any, action: any) => {
       state.isLoading = false;
+      state.errorMsg = action.payload;
     });
     // post comments
     builder.addCase(postComments.fulfilled, (state: any, action: any) => {

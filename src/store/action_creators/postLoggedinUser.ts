@@ -1,16 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AppDispatch } from "../store";
+import { setUserOnLocalStorage } from "./setUserOnLocalStorage";
 
-export const getLoggedinUser = createAsyncThunk<
+export const postLoggedinUser = createAsyncThunk<
   any,
   { email: string; password: string },
   {
-    rejectValue: any;
+    rejectWithValue: any;
+    dispatch: AppDispatch;
   }
 >(
   //action type string
   "POST/login",
   // callback function (referred to as a payloadCreator)
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue, dispatch }) => {
+    // const dispatch = useDispatch<AppDispatch>();
     try {
       const response = await fetch("/auth/login", {
         method: "POST",
@@ -26,6 +30,7 @@ export const getLoggedinUser = createAsyncThunk<
       if (response.message) {
         throw new Error(response.message);
       }
+      dispatch(setUserOnLocalStorage({ userInfo: response }));
       return response;
     } catch (error: any) {
       return rejectWithValue(error.message);

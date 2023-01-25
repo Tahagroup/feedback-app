@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserId } from "../store/action_creators/getUserId";
-import { AppDispatch } from "../store/store";
-import LoadingSpinner from "./LoadingSpinner";
 interface CommentItemProptypes {
   comment: any;
 }
 function CommentItem({ comment }: CommentItemProptypes) {
-  const dispatch = useDispatch<AppDispatch>();
-  const userInfos = useSelector(
-    (state: any) => state.authenticationSlice.userInfos
-  );
-  const [username, setusername] = useState();
+  // const dispatch = useDispatch<AppDispatch>();
+  const userInfos = [
+    { id: 1, name: "aaa" },
+    { id: 2, name: "bbb" },
+    { id: 3, name: "ccc" },
+    { id: 4, name: "admin" },
+    { id: 5, name: "ddd" },
+    { id: 6, name: "eee" },
+    { id: 7, name: "qqq" },
+  ];
 
-  useEffect(() => {
-    const foundInStore = userInfos.find((userinfo: getUserResponseType) => {
-      return userinfo.id === comment.userId;
-    });
+  // useEffect(() => {
+  //   const foundInStore = userInfos.find((userinfo: getUserResponseType) => {
+  //     return userinfo.id === comment.userId;
+  //   });
 
-    if (foundInStore) {
-      setusername(foundInStore.name);
-    } else {
-      dispatch(getUserId({ userId: comment.userId }));
-    }
-  }, [dispatch, comment.userId, userInfos]);
-  // console.log(userInfo);
-
+  //   // if (foundInStore) {
+  //   //   setusername(foundInStore.name);
+  //   // } else {
+  //   //   dispatch(getUserId({ userId: comment.userId }));
+  //   // }
+  // }, [dispatch, comment.userId, userInfos]);
+  const username = userInfos.filter(
+    (userInfo: any) => userInfo.id === comment.userId
+  )[0].name;
   return (
     <>
       {userInfos.length !== 0 && (

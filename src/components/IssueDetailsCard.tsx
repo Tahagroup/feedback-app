@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { getFiles } from "../store/action_creators/getFiles";
 import { patchIssue } from "../store/action_creators/patchIssue";
 import { postVote } from "../store/action_creators/postVote";
@@ -12,10 +12,13 @@ interface IssueDetailsCardPropTypes {
 function IssueDetailsCard({ issue }: IssueDetailsCardPropTypes) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation();
   const titleRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
-  const [isEditing, setisEditing] = useState(false);
-
+  const [isEditing, setisEditing] = useState(
+    location.pathname.split("/").slice(-1)[0] === "edit" ? true : false
+  );
+  const [selectedToPreview, setSelectedToPreview] = useState<any>(null);
   const { files } = useSelector((state: any) => state.issuesSlice);
   const { isAdmin, currentUser } = useSelector(
     (state: any) => state.authenticationSlice
@@ -30,7 +33,7 @@ function IssueDetailsCard({ issue }: IssueDetailsCardPropTypes) {
   }
   const persianDate = new Date(issue.date).toLocaleDateString("fa-ir");
   useEffect(() => {
-    dispatch(getFiles({ issueId: `${issue.id}` }));
+    dispatch(getFiles({ issueId: String(issue.id) }));
   }, [dispatch, issue.id]);
 
   function editHandler() {
@@ -47,12 +50,31 @@ function IssueDetailsCard({ issue }: IssueDetailsCardPropTypes) {
         })
       );
       setisEditing(false);
-      // navigate(`/issues/${issue.id}`);
+      window.location.reload();
     } else {
       setisEditing(true);
     }
   }
 
+  function openPreviewWindowHandler(event: React.MouseEvent, fileInfo: any) {
+    console.log(fileInfo);
+    setSelectedToPreview(fileInfo);
+  }
+
+  function closePreviewhandler() {
+    setSelectedToPreview(null);
+  }
+
+  function previewDownloadHandler(url: string, name: string) {
+    const a = document.createElement("a");
+    a.href = url;
+    // console.log(`/${url.split("/").slice(-2).join("/")}/`);
+    a.download = name;
+    // a.setAttribute("download", true);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
   return (
     <div className="detail_item">
       {isAdmin && (
@@ -109,29 +131,63 @@ function IssueDetailsCard({ issue }: IssueDetailsCardPropTypes) {
       <div className="multimedia_details">
         {files.map((file: any) => (
           <div className="file_item" key={file.id}>
-            {file.mimeType.split("/")[0] === "image" ? (
-              <img className="file_thumb" src={file.path} alt="not found" />
-            ) : (
-              <video
-                className="file_video"
-                src={file.path}
-                // poster="../file-icon.png"
-                controls
-              />
-            )}
+            <img
+              className="file_thumb"
+              src={
+                file.mimeType.split("/")[0] === "image"
+                  ? file.path
+                  : "../video.png"
+              }
+              alt="Not Found"
+              onClick={(event) =>
+                openPreviewWindowHandler(event, {
+                  fileName: file.name,
+                  fileURL: file.path,
+                  fileType: file.mimeType.split("/")[0],
+                })
+              }
+              // data-name={file.name}
+              // data-url={file.path}
+              // data-type={file.path}
+            />
             <div className="file_name"> {file.name}</div>
-            <a
-              href={file.path}
-              download
-              target="_blank"
-              rel="noreferrer"
-              className="download_button"
-            >
-              بارگیری
-            </a>
           </div>
         ))}
       </div>
+      {selectedToPreview && (
+        <div className="preview_page" onClick={closePreviewhandler}>
+          <div className="prev_details_wrapper">
+            <div
+              className="prev_download_button"
+              onClick={() =>
+                previewDownloadHandler(
+                  selectedToPreview.fileURL,
+                  selectedToPreview.fileName
+                )
+              }
+            >
+              بارگیری
+            </div>
+            <div className="prev_file_name">{selectedToPreview.fileName}</div>
+            {/* <a href={selectedToPreview.fileURL} download>
+              Download
+            </a> */}
+          </div>
+          {selectedToPreview.fileType === "image" ? (
+            <img
+              className="selected_image"
+              src={selectedToPreview.fileURL}
+              alt=""
+            />
+          ) : (
+            <video
+              className="selected_video"
+              src={selectedToPreview.fileURL}
+              controls
+            ></video>
+          )}
+        </div>
+      )}
     </div>
   );
 }

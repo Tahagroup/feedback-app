@@ -22,4 +22,62 @@
     background: black !important;
     border: 1px solid yellow;
   }
+  .new_label_wrapper {
+    position: relative;
+    .label_add_new {
+      color: black;
+      background: transparent !important;
+      border: 1px solid black;
+      &:hover {
+        background: #bbb !important;
+      }
+    }
+    .pop_up_container {
+      position: absolute;
+      right: 20px;
+      top: 30px;
+      background-color: white;
+      padding: 10px;
+      border: 2px solid #bbb;
+      color: #666;
+      direction: rtl;
+      border-radius: 10px 0 10px 10px;
+      display: flex;
+      flex-direction: column;
+      .close_popup {
+        text-align: right;
+        cursor: pointer;
+      }
+      .name_input {
+        font-family: "estedad";
+        box-sizing: border-box;
+        height: 40px;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #f7f8fd;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+      }
+      .color_input {
+        margin-top: 10px;
+        padding: 0;
+        border: none;
+        outline: none;
+        margin: auto;
+        width: 100%;
+      }
+      .add_label_button {
+        border: none;
+        outline: none;
+        margin-top: 20px;
+        border-radius: 5px;
+        padding: 5px 10px;
+        background-color: green;
+        font-family: "estedad";
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
 }

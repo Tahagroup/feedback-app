@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import { useDrop } from "react-dnd/dist/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { json } from "stream/consumers";
 import BoardIssueItem from "../components/BoardIssueItem";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { getIssues } from "../store/action_creators/getIssues";
 import { getIssuesAndReplace } from "../store/action_creators/getIssuesAndReplace";
+import { getUserFromLocalStorage } from "../store/action_creators/getUserFromLocalStorage";
 import { patchIssue } from "../store/action_creators/patchIssue";
 import { AppDispatch } from "../store/store";
 
@@ -17,8 +16,8 @@ function BoardPage() {
   const { isAdmin } = useSelector((state: any) => state.authenticationSlice);
   useEffect(() => {
     dispatch(getIssuesAndReplace({ offset: 0, sortBy: "Votes" }));
+    dispatch(getUserFromLocalStorage());
   }, [dispatch]);
-
   /////////////////////////////////////////////////////////////////////
   // [0] - Collected Props: An object containing collected properties from the collect function. If no collectfunction is defined, an empty object is returned.
   // [1] - DropTarget Ref: A connector function for the drop target. This must be attached to the drop-target portion of the DOM.

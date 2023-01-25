@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { json } from "stream/consumers";
 import { getLabels } from "../store/action_creators/getLabels";
 import { postIssues } from "../store/action_creators/postIssues";
 import { AppDispatch, RootState } from "../store/store";
@@ -43,16 +42,20 @@ function CreateIssuePage() {
     event.stopPropagation();
     setDragActive(false);
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
-      fileUploader(event.dataTransfer.files[0]);
+      for (const file of Array.from(event.dataTransfer.files)) {
+        fileUploader(file);
+      }
     }
   }
 
   function fileSelectHandler() {
     let input = document.createElement("input");
     input.type = "file";
+    input.multiple = true;
     input.onchange = (_) => {
-      let file = Array.from(input.files!)[0];
-      if (file) fileUploader(file);
+      for (const file of Array.from(input.files!)) {
+        fileUploader(file);
+      }
     };
     input.click();
   }
@@ -76,14 +79,6 @@ function CreateIssuePage() {
       console.log("Upload Progress: ", progress);
       setProgress(+progress);
     };
-
-    // xhr.onloadend = function (request) {
-    //   if (xhr.status === 200) {
-    //     setProgress(100);
-    //   } else {
-    //     console.log("error " + this.status);
-    //   }
-    // };
     xhr.onload = () => {
       setuploadedFile((prev: any) => {
         const newState = prev.concat({ id: xhr.response.id, file });

@@ -35,7 +35,7 @@ function BoardIssueItem({
       <div className="header">
         <div className="status">{title}</div>
         <div className="comments_count">
-          <div>{toPersian(issue.commentsCount || 0)}</div>
+          <div>{toPersian(issue.commentsCount ?? 0)}</div>
           <img src="./comments-icon.png" alt="" className="comments-icon" />
         </div>
       </div>

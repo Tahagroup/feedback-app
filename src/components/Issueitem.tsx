@@ -1,30 +1,42 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { deleteVote } from "../store/action_creators/deleteVote";
 import { patchIssue } from "../store/action_creators/patchIssue";
+import { patchVote } from "../store/action_creators/patchVote";
 import { postVote } from "../store/action_creators/postVote";
 import { AppDispatch } from "../store/store";
 import { toPersian } from "../utlils";
 
 interface IssueitempropTypes {
-  issue: Issue;
+  issue: any;
   allLabels: Label[];
 }
 function Issueitem({ issue, allLabels }: IssueitempropTypes) {
   const statusRef = useRef<HTMLSelectElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  // const [changed, setchanged] = useState(1);
+
   const { currentUser, isAdmin } = useSelector(
     (state: any) => state.authenticationSlice
   );
 
-  function voter(type: string) {
+  function voter(from: string, to: string) {
+    // from: current vote(undefined if not exists), to: selected vote
     if (currentUser) {
-      dispatch(postVote({ type, issueId: `${issue.id}` }));
-      // setchanged((prev: number) => prev + 1);
+      if (from === to) {
+        // delete vote
+        dispatch(deleteVote({ issueId: String(issue.id) }));
+      } else if (from) {
+        // patch vote
+        dispatch(patchVote({ issueId: String(issue.id), type: to }));
+      } else {
+        // post vote
+        dispatch(postVote({ type: to, issueId: String(issue.id) }));
+      }
     } else {
+      // not authenticated
       navigate("/login");
     }
   }
@@ -74,20 +86,24 @@ function Issueitem({ issue, allLabels }: IssueitempropTypes) {
           <img
             src="./upvote-icon.svg"
             alt=""
-            className="upvote"
-            onClick={() => voter("Up")}
+            className={`upvote ${issue.vote?.type === "Up" ? "selected" : ""}`}
+            onClick={() => voter(issue.vote?.type, "Up")}
           />
           <div className="votes_count--green">
             {toPersian(issue.upVoteCount)}
           </div>
           <div className="votes_count--red">
-            {toPersian(issue.downVoteCount)}
+            {issue.downVoteCount === 0
+              ? toPersian(issue.downVoteCount)
+              : toPersian(issue.downVoteCount) + "-"}
           </div>
           <img
             src="./downvote-icon.svg"
             alt=""
-            className="downvote"
-            onClick={() => voter("Down")}
+            className={`downvote ${
+              issue.vote?.type === "Down" ? "selected" : ""
+            }`}
+            onClick={() => voter(issue.vote?.type, "Down")}
           />
         </div>
       </div>
