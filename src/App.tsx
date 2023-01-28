@@ -44,11 +44,13 @@ function App() {
           <Route
             path="/profile"
             element={currentUser ? <ProfilePage /> : <LoginPage />}
+            // element={<ProfilePage />}
           />
           <Route
             path="/issues/new"
             element={
               currentUser ? <CreateIssuePage /> : <Navigate to="/login" />
+              // <CreateIssuePage />
             }
           />
           <Route path="/issues/:issueId" element={<CommentsPage />} />

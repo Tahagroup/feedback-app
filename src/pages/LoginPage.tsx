@@ -23,7 +23,8 @@ function LoginPage() {
   return (
     <div className="auth_page">
       <div className="loginWrapper">
-        <div className="auth_left">
+        <img className="mobile_bg mobile-only" src="./loginBG.jpg" alt="bg" />
+        <div className="auth_left desktop-only">
           <div className="logo_wrapper">
             <img src="./bale-logo.png" alt="" />
           </div>
@@ -31,6 +32,12 @@ function LoginPage() {
           <img src="./loginBG.jpg" alt="login" />
         </div>
         <div className="auth_right">
+          <img
+            className="mobile-only"
+            style={{ marginTop: "20px" }}
+            src="./bale-logo.png"
+            alt=""
+          />
           <form onSubmit={formSubmitHandler}>
             <div className="input_wrapper">
               <label htmlFor="email">ایمیل</label>

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { issueActions } from "../slices/IssuesSlice";
 
 export const getComments = createAsyncThunk<
   any,
@@ -9,11 +10,13 @@ export const getComments = createAsyncThunk<
   }
 >(
   "GET/comments",
-  async ({ issueId, offset }, { rejectWithValue, getState }) => {
+  async ({ issueId, offset }, { rejectWithValue, getState, dispatch }) => {
     try {
-      // const currentOffset = (getState() as { issuesSlice: any }).issuesSlice
-      //   .commentsPageOffset;
-
+      const { thereIsMoreData } = (getState() as { issuesSlice: any })
+        .issuesSlice;
+      if (!thereIsMoreData) {
+        throw new Error("End of Comments");
+      }
       const response = await fetch(
         `/issues/${issueId}/comments?offset=${offset}`,
         {
@@ -24,6 +27,7 @@ export const getComments = createAsyncThunk<
         }
       ).then((data) => data.json());
       if (response.length === 0) {
+        dispatch(issueActions.setEndOfData());
         throw new Error("End of Comments");
       }
       if (response.message) {

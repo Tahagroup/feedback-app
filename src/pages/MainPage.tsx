@@ -8,7 +8,6 @@ import RoadmapSummary from "../components/RoadmapSummary";
 import { getIssues } from "../store/action_creators/getIssues";
 import { getIssuesAndReplace } from "../store/action_creators/getIssuesAndReplace";
 import { getLabels } from "../store/action_creators/getLabels";
-import { authActions } from "../store/slices/AuthSlice";
 import { AppDispatch } from "../store/store";
 
 ////////////////////////////////////////////////////////////////////////

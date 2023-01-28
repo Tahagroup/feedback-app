@@ -1,3 +1,5 @@
+@import "mobile";
+
 .create_issue_page {
   max-width: 600px;
   margin: auto;
@@ -8,6 +10,11 @@
     text-align: left;
     margin-bottom: 10px;
     cursor: pointer;
+    @include mobile {
+      margin-left: 10px;
+      position: sticky;
+      top: 10px;
+    }
     .return {
       margin-left: 5px;
     }

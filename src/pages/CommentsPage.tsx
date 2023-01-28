@@ -18,7 +18,7 @@ function CommentsPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, visitingIssue, comments, errorMsg } = useSelector(
+  const { isLoading, visitingIssue, comments } = useSelector(
     (state: any) => state.issuesSlice
   );
   const onScroll = useCallback(() => {
@@ -28,12 +28,12 @@ function CommentsPage() {
 
     // if reaches end of page
     if (scrollTop + clientHeight >= scrollHeight) {
-      if (issueId && errorMsg !== "End of Comments") {
+      if (issueId) {
         offsetRef.current = offsetRef.current + 20;
         dispatch(getComments({ issueId, offset: offsetRef.current }));
       }
     }
-  }, [dispatch, issueId, errorMsg]);
+  }, [dispatch, issueId]);
 
   useEffect(() => {
     window.addEventListener("scroll", onScroll);
@@ -100,7 +100,6 @@ function CommentsPage() {
               {comments.map((comment: any) => (
                 <CommentItem comment={comment} key={comment.id} />
               ))}
-              {/* <div ref={lastElementRef}></div> */}
             </>
           )}
         </div>

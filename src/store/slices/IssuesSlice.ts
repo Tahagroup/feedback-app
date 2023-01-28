@@ -11,6 +11,7 @@ import { patchVote } from "../action_creators/patchVote";
 import { postComments } from "../action_creators/postComments";
 import { postIssues } from "../action_creators/postIssues";
 import { postVote } from "../action_creators/postVote";
+
 const IssuesSlice = createSlice({
   name: "issuesSlice",
   initialState: {
@@ -21,10 +22,13 @@ const IssuesSlice = createSlice({
     files: [],
     isLoading: false,
     errorMsg: null,
-    commentsPageOffset: 0,
+    thereIsMoreData: true,
   },
   reducers: {
     //define possible actions(= define reducers which return actions)
+    setEndOfData(state) {
+      state.thereIsMoreData = false;
+    },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
@@ -213,15 +217,15 @@ const IssuesSlice = createSlice({
     // get comments
     builder.addCase(getComments.fulfilled, (state: any, action: any) => {
       state.comments = [...state.comments, ...action.payload];
-      state.isLoading = false;
-      state.errorMsg = null;
+      // state.isLoading = false;
+      // state.errorMsg = null;
     });
     builder.addCase(getComments.pending, (state: any, action: any) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     });
     builder.addCase(getComments.rejected, (state: any, action: any) => {
-      state.isLoading = false;
-      state.errorMsg = action.payload;
+      // state.isLoading = false;
+      // state.errorMsg = action.payload;
     });
     // post comments
     builder.addCase(postComments.fulfilled, (state: any, action: any) => {
