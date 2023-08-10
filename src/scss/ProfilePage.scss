@@ -1,9 +1,13 @@
+@import "mobile";
 .profilePage {
   direction: rtl;
   user-select: none;
   max-width: 600px;
   margin: auto;
   margin-top: 80px;
+  @include mobile {
+    padding: 0 10px;
+  }
   .loggedin_card {
     background-color: #345681;
     color: #6be5ab;
@@ -36,6 +40,10 @@
         border: none;
         outline: none;
         border-radius: 10px;
+        @include mobile {
+          width: 100%;
+          text-align: center;
+        }
       }
       .name {
       }
@@ -48,6 +56,9 @@
       width: 50%;
       gap: 10px;
       margin: auto;
+      @include mobile {
+        width: 100%;
+      }
       .update_user {
         cursor: pointer;
         flex: 2;
@@ -95,6 +106,10 @@
       border: none;
       outline: none;
       border-radius: 10px;
+      @include mobile {
+        width: 100%;
+        text-align: center;
+      }
     }
     .access_change {
       display: flex;

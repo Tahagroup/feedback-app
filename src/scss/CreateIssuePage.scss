@@ -5,6 +5,9 @@
   margin: auto;
   margin-top: 30px;
   user-select: none;
+  @include mobile {
+    padding: 10px;
+  }
   .previous_page_link {
     color: #8a8ca3;
     text-align: left;

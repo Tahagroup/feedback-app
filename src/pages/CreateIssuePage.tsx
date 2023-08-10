@@ -15,7 +15,6 @@ function CreateIssuePage() {
   const descTextRef = useRef<HTMLTextAreaElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const labelsRef = useRef<any[]>([]);
-  // const filesRef = useRef<any[]>([]);
   const [uploadedFile, setuploadedFile] = useState<uploadedFiles[]>([]);
 
   const [dragActive, setDragActive] = React.useState(false);
@@ -200,7 +199,6 @@ function CreateIssuePage() {
                 </div>
               ))}
           </div>
-          {/* ///////////////////////////////////////////////////////// */}
           <div className="drop_zone">
             <form
               className="form-file-upload"
@@ -236,7 +234,6 @@ function CreateIssuePage() {
               </label>
             </form>
           </div>
-          {/* ///////////////////////////////////////////////////////// */}
         </div>
         <div className="buttons_wrapper">
           <button className="draft" disabled>

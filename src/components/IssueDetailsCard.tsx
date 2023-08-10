@@ -184,6 +184,7 @@ function IssueDetailsCard({ issue }: IssueDetailsCardPropTypes) {
               className="selected_video"
               src={selectedToPreview.fileURL}
               controls
+              autoPlay
             ></video>
           )}
         </div>

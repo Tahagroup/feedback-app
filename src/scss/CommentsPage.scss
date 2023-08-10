@@ -1,3 +1,5 @@
+@import "mobile";
+
 .comments_Page {
   display: flex;
   flex-direction: column;
@@ -7,6 +9,9 @@
   user-select: none;
   gap: 20px;
   direction: rtl;
+  @include mobile {
+    padding: 0 10px;
+  }
   .actions_part {
     display: flex;
     justify-content: space-between;

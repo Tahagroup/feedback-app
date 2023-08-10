@@ -1,3 +1,5 @@
+@import "mobile";
+
 .detail_item {
   direction: rtl;
   background: #ffffff;
@@ -129,7 +131,6 @@
     align-items: center;
     flex-direction: column;
     // padding: 0 20px;
-
     .prev_details_wrapper {
       width: 100%;
       background-color: #eee;
@@ -138,9 +139,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+
       .prev_file_name {
         color: #23579a;
         margin-left: 50px;
+        @include mobile {
+          margin-left: 20px;
+        }
       }
       .prev_download_button {
         margin-right: 50px;
@@ -151,15 +156,24 @@
         padding: 5px 10px;
         border-radius: 5px;
         cursor: pointer;
+        @include mobile {
+          margin-right: 20px;
+        }
       }
     }
     .selected_image {
       max-width: 60%;
       max-height: 70vh;
+      @include mobile {
+        max-width: 90%;
+      }
     }
     .selected_video {
       max-width: 60%;
       max-height: 70vh;
+      @include mobile {
+        max-width: 90%;
+      }
     }
   }
 }

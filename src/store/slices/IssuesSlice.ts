@@ -29,6 +29,10 @@ const IssuesSlice = createSlice({
     setEndOfData(state) {
       state.thereIsMoreData = false;
     },
+    setStartOfData(state) {
+      state.thereIsMoreData = true;
+      state.comments = [];
+    },
   },
   //handles asynchronous requests:
   extraReducers: (builder) => {
@@ -90,7 +94,6 @@ const IssuesSlice = createSlice({
     // patch issue
     builder.addCase(patchIssue.fulfilled, (state: any, action: any) => {
       state.isLoading = false;
-      // console.log(action.payload);
       const targetIssueIndex = state.issues.findIndex(
         (issue: Issue) => issue.id === action.payload.id
       );
@@ -250,9 +253,6 @@ const IssuesSlice = createSlice({
   },
 });
 
-//exporting actions to execute them in the components
 export const issueActions = IssuesSlice.actions;
-//exporting slice
 export default IssuesSlice;
 
-///////////////////////////////////////////////////////////////////

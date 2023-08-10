@@ -10,7 +10,7 @@ const AuthSlice = createSlice({
   initialState: {
     currentUser: null,
     isAdmin: false,
-    adminsList: [4], // initial admin
+    adminsList: [2], // initial admin
     userInfos: [],
     foundUser: null,
     isLoading: false,

@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { getComments } from "../store/action_creators/getComments";
 import { getSingleIssue } from "../store/action_creators/getSingleIssue";
 import { postComments } from "../store/action_creators/postComments";
+import { issueActions } from "../store/slices/IssuesSlice";
 import { AppDispatch } from "../store/store";
 import { toPersian } from "../utlils";
 
@@ -25,7 +26,6 @@ function CommentsPage() {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-
     // if reaches end of page
     if (scrollTop + clientHeight >= scrollHeight) {
       if (issueId) {
@@ -36,9 +36,11 @@ function CommentsPage() {
   }, [dispatch, issueId]);
 
   useEffect(() => {
-    window.addEventListener("scroll", onScroll);
     if (issueId) {
-      dispatch(getComments({ issueId, offset: 0 }));
+      dispatch(issueActions.setStartOfData());
+      dispatch(getComments({ issueId, offset: 0 })).then(() => {
+        window.addEventListener("scroll", onScroll);
+      });
       dispatch(getSingleIssue({ issueId }));
     }
     return () => window.removeEventListener("scroll", onScroll);

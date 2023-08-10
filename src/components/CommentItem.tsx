@@ -5,12 +5,12 @@ function CommentItem({ comment }: CommentItemProptypes) {
   // const dispatch = useDispatch<AppDispatch>();
   const userInfos = [
     { id: 1, name: "aaa" },
-    { id: 2, name: "bbb" },
+    { id: 2, name: "admin" },
     { id: 3, name: "ccc" },
-    { id: 4, name: "admin" },
-    { id: 5, name: "ddd" },
-    { id: 6, name: "eee" },
-    { id: 7, name: "qqq" },
+    { id: 4, name: "bbb" },
+    // { id: 5, name: "ddd" },
+    // { id: 6, name: "eee" },
+    // { id: 7, name: "qqq" },
   ];
 
   // useEffect(() => {
