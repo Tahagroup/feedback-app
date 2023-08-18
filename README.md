@@ -1,12 +1,8 @@
 Feedback app
 ===========
 
-Bale Feedbacks App
-
+Bale Feedbacks App(bug reporting)
 [on Frontend mentor](https://www.frontendmentor.io/challenges/product-feedback-app-wbvUYqjR6)
-
-![Demo](./designs/1.jpg)
-
 # لیست کارها و ویژگی‌ها
 
 - ایجاد ساختار Routing شامل Routeهای زیر
@@ -64,9 +60,21 @@ Bale Feedbacks App
 
 - crud برچسب ها
 - بررسی و انتشار موضوعات دریافت شده
+
 - حذف موضوعات
 - تغییر وضعیت یک موضوع
   - در صفحه ی موضوع
   - به صورت DnD در صفحه‌ی board
 - صفحه‌ی تعیین دسترسی کاربر
   باید با جستجو یک کاربر را پیدا کند و دسترسی اون را تغییر دهد.
+  
+
+![Demo](./designs/1.jpg)
+![Demo](./designs/2.jpg)
+![Demo](./designs/3.jpg)
+![Demo](./designs/4.jpg)
+![Demo](./designs/5.jpg)
+![Demo](./designs/6.jpg)
+![Demo](./designs/7.jpg)
+![Demo](./designs/8.jpg)
+![Demo](./designs/9.jpg)
